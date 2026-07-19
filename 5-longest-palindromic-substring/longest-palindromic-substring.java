@@ -8,7 +8,7 @@ class Solution {
             int len1 = expandFromCenter(s, i, i);     // odd length
             int len2 = expandFromCenter(s, i, i + 1); // even length
             int len = Math.max(len1, len2);
-
+                                        
             if (len > end - start) {
                 start = i - (len - 1) / 2;
                 end = i + len / 2;
