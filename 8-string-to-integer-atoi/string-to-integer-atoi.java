@@ -7,15 +7,13 @@ class Solution {
 
         while(i<n && s.charAt(i)==' '){
             i++;
-        }
-
+        }                                         
         if(i<n && (s.charAt(i)=='+' || s.charAt(i)=='-')){
             if(s.charAt(i)=='-'){
                 sign=-1;
             }
             i++;
         }
-
         while(i<n && Character.isDigit(s.charAt(i))){
             result=result*10+(s.charAt(i)-'0');
 
@@ -30,4 +28,4 @@ class Solution {
         }
         return (int)(sign * result);
     }
-}
+}                                            
