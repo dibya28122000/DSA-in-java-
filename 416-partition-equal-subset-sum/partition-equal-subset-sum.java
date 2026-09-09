@@ -7,44 +7,30 @@ class Solution {
         for (int i = 0; i < nums.length; i++) {
             sum = sum + nums[i];
         }
-
         if (sum % 2 != 0) {
             return false;
         }
 
         int target = sum / 2;
 
-        Boolean[][] dp = new Boolean[nums.length][target + 1];
+        boolean[][] dp = new boolean[nums.length + 1][target + 1];
 
-        return helper(nums, nums.length - 1, target, dp);
-    }
-
-    public boolean helper(int[] nums, int index, int target, Boolean[][] dp) {
-
-        if (target == 0) {
-            return true;
+        for (int i = 0; i <= nums.length; i++) {
+            dp[i][0] = true;
         }
 
-        if (index < 0) {
-            return false;
+        for (int i = 1; i <= nums.length; i++) {
+
+            for (int j = 1; j <= target; j++) {
+
+                dp[i][j] = dp[i - 1][j];
+
+                if (nums[i - 1] <= j) {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j - nums[i - 1]];
+                }
+            }
         }
 
-        if (dp[index][target] != null) {
-            return dp[index][target];
-        }
-
-      
-        boolean notTake = helper(nums, index - 1, target, dp);
-
-       
-        boolean take = false;
-
-        if (nums[index] <= target) {
-            take = helper(nums, index - 1, target - nums[index], dp);
-        }
-
-        dp[index][target] = take || notTake;
-
-        return dp[index][target];
+        return dp[nums.length][target];
     }
 }
