@@ -1,33 +1,44 @@
 class Solution {
     public boolean isMatch(String s, String p) {
 
-        int i=0;
-        int j=0;
-        int star=-1;
-        int match = 0;
-        
-        while(i<s.length()){
-            if(j<p.length()&&(p.charAt(j)=='?'||p.charAt(j)==s.charAt(i))) {
-                i++;
-                j++;
-            } 
-            else if(j<p.length()&&p.charAt(j)=='*'){
-                star=j;
-                match=i;
-                j++;
-            } 
-            else if(star!=-1){
-                j=star+1;
-                match++;
-                i=match;
-            } 
-            else {
-                return false;
+        int m = s.length();
+        int n = p.length();
+        Boolean [][] dp = new Boolean [m+1][n+1];
+        return helper(m, n, s, p,dp);
+    }
+
+    public boolean helper(int i, int j, String s, String p ,Boolean[][] dp) {
+        if (i == 0 && j == 0) {
+            return true;
+        }
+        if (j == 0) {
+            return false;
+        }
+        if (i == 0) {
+            while (j > 0) {
+                if (p.charAt(j - 1) != '*') {
+                    return false;
+                }
+                j--;
             }
+            return true;
         }
-        while(j<p.length()&&p.charAt(j)=='*'){
-            j++;
+
+        if(dp[i][j]!=null){
+            return dp[i][j];
         }
-        return j==p.length();  
+        if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '?') {
+            dp[i][j] = helper(i - 1, j - 1, s, p , dp);
+        }
+        else if (p.charAt(j - 1) == '*') {
+            dp[i][j] =  helper(i, j - 1, s, p,dp) 
+                || helper(i - 1, j, s, p,dp);
+        }
+
+        else {
+            dp[i][j]= false;
+        }
+
+    return dp[i][j];
     }
 }
