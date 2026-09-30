@@ -7,13 +7,12 @@ class Solution {
         Arrays.sort(words, (a, b) -> a.length() - b.length());
 
         int n = words.length;
+        int maxLen = 1;
         int[] dp = new int[n];
 
-        Arrays.fill(dp, 1);
-
-        int ans = 1;
-
         for (int i = 0; i < n; i++) {
+
+            dp[i] = 1;
 
             for (int j = 0; j < i; j++) {
 
@@ -23,31 +22,33 @@ class Solution {
                 }
             }
 
-            ans = Math.max(ans, dp[i]);
+            maxLen = Math.max(maxLen, dp[i]);
         }
 
-        return ans;
+        return maxLen;
     }
 
     public boolean isPredecessor(String a, String b) {
 
-        if (b.length() != a.length() + 1) {
-            return false;
-        }
+       int m = a.length();
+       int n = b.length();
+
+       if(n-m!=1){
+        return false;
+       }
 
         int i = 0;
         int j = 0;
 
-        while (i < a.length() && j < b.length()) {
+        while (i < m && j < n) {
 
             if (a.charAt(i) == b.charAt(j)) {
                 i++;
-                j++;
-            } else {
-                j++;
-            }
+            } 
+            j++;
+            
         }
 
-        return i == a.length();
+        return i == m;
     }
 }
