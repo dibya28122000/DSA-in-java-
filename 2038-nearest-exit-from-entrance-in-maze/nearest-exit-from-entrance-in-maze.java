@@ -1,37 +1,35 @@
-import java.util.*;
-
 class Solution {
     public int nearestExit(char[][] maze, int[] entrance) {
-        int m = maze.length;
-        int n = maze[0].length;
+        int row = maze.length;
+        int col = maze[0].length;
+        boolean[][] vis = new boolean[row][col];
         
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{entrance[0], entrance[1], 0}); // {row, col, steps}
-        maze[entrance[0]][entrance[1]] = '+'; // mark entrance as visited
-        
-        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}}; // down, up, right, left
-        
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
-            int r = cur[0], c = cur[1], steps = cur[2];
-            
-            // Check all 4 directions
-            for (int[] d : dirs) {
-                int nr = r + d[0];
-                int nc = c + d[1];
-                
-                // Check if in bounds and empty
-                if (nr >= 0 && nr < m && nc >= 0 && nc < n && maze[nr][nc] == '.') {
-                    // If border cell and not entrance → exit found
-                    if (nr == 0 || nr == m-1 || nc == 0 || nc == n-1) {
-                        return steps + 1;
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{entrance[0],entrance[1],0});
+        vis[entrance[0]][entrance[1]] = true;
+
+        int[][] dir = {{-1, 0},{0,1},{1,0},{0,-1}};
+
+        while(!q.isEmpty()) {
+            int[] curr = q.poll();
+            int r = curr[0];
+            int c = curr[1];
+            int d = curr[2];
+            for(int i = 0; i < 4; i++) {
+                int nr = r + dir[i][0];
+                int nc = c + dir[i][1];
+
+                if(nr >= 0 && nr < row && nc >= 0 && nc < col 
+                    && maze[nr][nc] == '.' && !vis[nr][nc]) {
+
+                    if (nr == 0 || nr == row - 1 || nc == 0 || nc == col - 1) {
+                        return d + 1;
                     }
-                    queue.offer(new int[]{nr, nc, steps + 1});
-                    maze[nr][nc] = '+'; // mark visited
+                    q.offer(new int[]{nr, nc, d + 1});
+                    vis[nr][nc] = true;
                 }
             }
         }
-        
-        return -1; // no exit found
+        return -1;
     }
 }
